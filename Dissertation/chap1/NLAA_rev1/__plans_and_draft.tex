@@ -1,0 +1,542 @@
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+%\usepackage{mathabx}
+\usepackage{url}
+\usepackage{mathtools}
+
+
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+
+\title{QTT, circulants, etc}
+\author{Max and Lev}
+\date{March 2021}
+
+\begin{document}
+	
+	\maketitle
+	
+		\section{Plans and ideas}
+	\begin{enumerate}
+		\item Proof of case of $[a_0, \dots, a_{n-1}, 0, \dots]$
+		\item Proof of case of $[a_0, \dots, a_{m-1}, 0, \dots, 0, a_{-q}, \dots, a_{-1}]$
+		\item Does it follows from the invertibility of $A$ that the polynomials don't have roots on the unit circle?
+		\item Check both cases numerically. Done: \url{https://colab.research.google.com/drive/103BVBb9LBtD5oCCVqK0eUeYkc_zbf4O-?usp=sharing}
+		\item Explicit formulas for cases of mass matrix, stiffness matrix and Laplace operator matrix (see pdf-s with whiteboards) [are these their real names ???]
+		\item Two-level circulants
+		\item How many simple roots do polynomials actually have inside the unit circle?
+		Check for random polynomials and some interesting concrete ones (which ones ???) 
+		\textbf{Seems it doesn't matter}: rank is equal to the number of roots of $g(z)$ inside the unit circle plus number of roots of $g(z^{-1})$ inside the unit circle, i.e. $\deg g(z)$.
+		\item Close roots give low-rank approximations.
+		\item We can fill the unit circle uniformly with points and thus get a low-rank approximation to any inverse circulant (?!!) 
+	\end{enumerate}
+	
+	\section{Abstract}
+	
+	TBA
+	
+	\section{Introduction}
+	
+	TBA 
+	
+	\section{Circulant matrix inverse}
+	Consider a nondegenerate circulant matrix $A \in \mathbb{C}^{N\times N}$,
+	\begin{equation}\label{eq:A}
+	A=
+	\begin{bmatrix}
+a_0     & a_{-1} & \dots  & a_{-n} & 0      & \dots  & 0       & a_{m-1} & \dots  & a_1     \\
+a_1     & \ddots &        &        & \ddots &        &         &         & \ddots & \vdots  \\
+\vdots  &        & \ddots &        &        & \ddots &         &         &        & a_{m-1} \\
+a_{m-1} &        &        & \ddots &        &        & \ddots  &         &        & 0       \\
+0       & \ddots &        &        & \ddots &        &         & \ddots  &        & \vdots  \\
+\vdots  &        & \ddots &        &        & \ddots &         &         & \ddots & 0       \\
+0       &        &        & \ddots &        &        & \ddots  &         &        & a_{-n}  \\
+a_{-n}  &        &        &        & \ddots &        &         & \ddots  &        & \vdots  \\
+\vdots  & \ddots &        &        &        & \ddots &         &         & \ddots & a_{-1}  \\
+a_{-1}  & \dots  & a_{-n} & 0      & \dots  & 0      & a_{m-1} & \dots   & a_1    & a_0    
+	\end{bmatrix},
+	\end{equation}
+	where 
+	\[
+	m \ge 1,~n \ge 0,~a_{m-1} \neq 0,~a_{-n} \neq 0
+	\]
+	(obviously, any nonzero circulant matrix can be written in this form).
+	Let $X \in \mathbb{C}^{N \times N}$ denote the inverse of $A$: $X := A^{-1}$.
+	It is well known~\cite{somebody} that the inverse of a circulant matrix is also circulant.
+	For $j = 0, \dots, N-1$ denote $x_{j}$ the $j$-th element of the first column of $X$, i.e. $X_{j, 0}$.
+	%
+	We can write for all $k,\ell \in \{0,\dots,N-1\}$ by definition of the inverse:
+	\[
+	\sum_{j=0}^{N-1} A_{k, j}X_{j,\ell}
+	=
+	\delta_{k,\ell}
+	:=
+	\begin{cases}
+		1, &k=\ell, \\
+		0, &\text{otherwise}.
+	\end{cases}
+	\]
+	For circulants $A$ and $X$ this system of equations is equivalent to 
+	\[
+	\sum_{j=0}^{N-1} A_{(k-j) \bmod N, 0} X_{(j-\ell)\bmod N, 0}
+	=
+	\delta_{k,\ell},~k,\ell \in \{0,\dots, N-1\}
+	\]
+	or 
+	\begin{equation}\label{eq:inverse}
+	    \sum_{j=0}^{N-1} A_{(k-j) \bmod N, 0} x_{(j-\ell)\bmod N}
+	=
+	\delta_{k,\ell},
+	~k,\ell \in \{0,\dots,N-1\}.
+	\end{equation}
+	%
+	
+	Now, consider an biinfinite Toeplitz matrix $A^{(\infty)}$ with elements
+	\[
+	A^{(\infty)}_{i,j}
+	=
+	\begin{cases}
+	    a_{i-j},~&\text{if } -n \le i-j \le m-1,\\
+	    0,~&\text{otherwise}.
+	\end{cases}
+	\]
+	In other words,
+	\[
+	A^{(\infty)} = \begin{bmatrix}
+	\ddots & \ddots &        & \ddots  & \ddots  &        &        \\
+	\ddots & a_0    & a_{-1} & \dots   &  a_{-n} &    0   & \dots  \\
+	       & a_1    & \ddots & \ddots  &         & \ddots & \ddots \\
+	\ddots & \vdots & \ddots &         &         &        &        \\
+	\ddots & a_{m-1}&        &         &         &        &        \\
+	       & 0      & \ddots &         &         &        &        \\
+	       & \vdots & \ddots &         &         &        &        
+	\end{bmatrix}.
+	\]
+	Consider the equation
+	\begin{equation}\label{eq:infinite}
+	A^{(\infty)} \xi = \beta,
+	\end{equation}
+	where $\xi$ and $\beta$ are biinfinite vectors with elements
+	$\xi_{j} = x_{j \bmod N}$ and 
+	\[
+	\beta_{j} = \begin{cases}
+	    1,~\text{if}~j \bmod N = 0 \\
+	    0,~\text{otherwise}.
+	\end{cases}
+	\]
+	The notation $A^{(\infty)}\xi$ means biinfinite matrix-by-vector multiplication:
+	\[
+	\beta_{k} = \sum_{j=-\infty}^{\infty}A^{(\infty)}_{k,j}\xi_{j}.
+	\]
+	Note that these series are not truly infinite as there is no more than $m+n$ nonzero elements in each row of $A^{(\infty)}$.
+	Thus each such series is convergent.
+	We can also rewrite the equation~\eqref{eq:infinite} in more verbose and possibly comprehensible form:
+	\[
+	A^{(\infty)}
+	\begin{bmatrix}
+	\vdots \\
+	x_0 \\
+	x_1 \\
+	\vdots \\
+	x_{N-1} \\
+	x_0 \\
+	\vdots
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	\vdots \\
+	1 \\
+	0 \\
+	\vdots \\
+	0 \\
+	1 \\
+	\vdots
+	\end{bmatrix}.
+	\]
+	
+	\begin{lemma}\label{lm:sum-shift}
+	For any function $f:\{0,\dots,N-1\}\to \mathbb{C}$ and integers  $a,b$ the following holds:
+	\[
+	\sum_{j=a}^{a+N-1} f(j \bmod N) = \sum_{j=b}^{b+N-1} f(j \bmod N).
+	\]
+	\end{lemma}
+	\begin{proof}
+	For any integer $a$ the sequence 
+	\[
+	\Big(a \bmod N, \dots, (a+N-1) \bmod N\Big)
+	\]
+	is obviously a permutation of $(0,\dots, N-1)$, thus
+	\[
+	\sum_{j=a}^{a+N-1} f(j \bmod N) = \sum_{j=0}^{N-1} f(j) = \sum_{j=b}^{b+N-1} f(j \bmod N).
+	\]
+	\end{proof}
+	
+	\begin{lemma}\label{lm:equivalent}
+	Equations~\eqref{eq:inverse} and~\eqref{eq:infinite}, viewed as equations for $x_0,\dots,x_{N-1}$, are equivalent.
+	\end{lemma}
+	\begin{proof}
+	We start from~\eqref{eq:inverse} and substitute the summation index with $j' = j - \ell$:
+	\[
+    \sum_{j'=-\ell}^{N-1-\ell} A_{((k-\ell)- j') \bmod N, 0} x_{j'\bmod N}
+	=
+	\delta_{k,\ell}.
+	\]
+	We can apply Lemma~\ref{lm:sum-shift} to the left part of the equality as the summed expression is indeed a function of $j' \bmod N$.
+    Therefore, we obtain:
+	\[
+	\sum_{j'=0}^{N-1} A_{((k-\ell)- j') \bmod N, 0} x_{j'}
+	=
+	\delta_{k,\ell}.
+	\]
+	The left part of the equality depends only on $(k-\ell) \bmod N$ and thus instead of $N^2$ equations we can equivalently write only $N$:
+	\[
+	\sum_{j=0}^{N-1} A_{(k-j) \bmod N, 0} x_j
+	=
+	\delta_{k,0},~ 0\le k \le N-1.
+	\]
+	If we substitute the summation index with $j'' = k-j$ and take into account that $x_j = \xi_{j}$ for $0\le j \le N-1$, we obtain
+	\[
+	\sum_{j''=k-m-n+1}^{k} A_{j'' \bmod N, 0} \xi_{k-j''} = \delta_{k,0}.
+	\]
+	We again apply Lemma~\ref{lm:sum-shift} (the biinfinite vector $\xi$  is $N$-periodic and thus depends only on $j'' \bmod N$):
+	\[
+	\sum_{j''=-n}^{m-1}A_{j'' \bmod N}\xi_{k-j''} = \delta_{k,0}.
+	\]
+	It is obvious that for $-n \le j'' \le m-1$ it holds that $A_{j'' \bmod N,0} = A^{(\infty)}_{j'', 0}$.
+	Moreover, $A^{(\infty)}_{j'', 0} = 0$ for $j'' \not\in [-n,m-1]$, so we obtain
+	\[
+	\sum_{j''=-\infty}^{\infty}A^{(\infty)}_{j'',0}\xi_{k-j''} = \delta_{k,0}.
+	\]
+	Change the summation index back to $j = k-j''$:
+	\[
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k-j,0}\xi_{j}
+	=
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k,j}\xi_{j}
+	=
+	\delta_{k,0},
+	,~ 0\le k \le N-1.
+	\]
+	Now take any $k' \in \mathbb{Z}$ and represent it as $k' = k + Nq$, where $q$ and $k$ are integers such that $0 \le k \le N-1$.
+	By changing the summation index to $j' = j - Nq$ we can write:
+	\[
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k',j}\xi_{j}
+    =
+    \sum_{j'=-\infty}^{\infty}A^{(\infty)}_{k',j'+Nq}\xi_{j'}
+    =
+    \sum_{j'=-\infty}^{\infty}A^{(\infty)}_{k,j'}\xi_{j'}
+    =
+    \delta_{k,0}.
+    \]
+    Therefore, the system of equations~\eqref{eq:inverse} is equivalent to the infinite system of equations
+    \[
+    \sum_{j=-\infty}^{\infty}A^{(\infty)}_{k,j}\xi_{j} = \delta_{k\bmod N,0},~k\in\mathbb{Z},
+    \]
+    which is the same as $A^{(\infty)}\xi = \beta$.
+	\end{proof}
+	
+	Will will denote by $U$ the unit circle on the complex plane, i.e. $U = \{z\in\mathbb{Z}: |z| = 1\}$.
+	Let us consider the Laurent polynomial $f(z)$:
+	\[
+	f(z) := a_{-n}z^{-n} + \dots + a_{-1}z^{-1} + a_0 + a_1 z + \dots +a_{m-1}z^{m-1}.
+	\]
+	Let us additionally assume that $f(z)$ does not have roots on $U$ (i.e. $f(z) \neq 0$ for all $z \in U$).
+	Note that this implies the same property for Laurent polynomial $f(z^{-1})$ as if $f(z_-^{-1}) = 0$ for some $z_- \in U$, then $f(z_+) = 0$ for $z_+ = z^{-1}_- \in U$.
+	Now consider biinfinite matrix $B$ with elements:
+	\begin{equation}\label{eq:B}
+	B_{j,\ell} = \frac{1}{2\pi i} \oint_U \frac{z^{\ell - j-1}dz}{f(z)}.
+	\end{equation}
+	\begin{lemma} Matrix $B$ is the right inverse of $A^{(\infty)}$:
+	\[
+	A^{(\infty)}B = I_{\infty},
+	\]
+	where $I^{(\infty)}$ is biinfinite identity matrix: $I^{(\infty)}_{k,\ell} = \delta_{k,\ell}$.
+	\end{lemma}
+	\begin{proof}
+	Let us compute an element of matrix $A^{(\infty)}B$:
+	\begin{align*}
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k, j}B_{j, \ell}
+	&=
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k-j, 0}B_{j, \ell}
+	=
+	\sum_{j'=-n}^{m-1}a_{j'}B_{k-j', \ell}
+	=\\&=
+	\frac{1}{2\pi i}\oint_U\frac{1}{g(z)}\sum_{j'=-n}^{m-1}a_{j'}z^{l-k+j'-1}dz
+	=
+	\frac{1}{2\pi i}\oint_U\frac{g(z)}{g(z)}z^{l-k-1}dz.
+	\end{align*}
+	It is well known (see e.g.~\cite{somebody}) that for any integer $q$
+	\[
+	\oint_U z^{q}dz
+	=
+	\begin{cases}
+	2\pi i,&\text{if } q = -1,\\
+	0,&\text{otherwise}.
+	\end{cases}
+	\]
+	Therefore, we finally obtain
+	\[
+	\sum_{j=-\infty}^{\infty}A^{(\infty)}_{k, j}B_{j, \ell} = \delta_{k,\ell} ~\Longleftrightarrow~A^{(\infty)}B = I^{(\infty)}.
+	\]
+	\end{proof}
+	
+	Now we can prove the key theorem.
+	\begin{theorem}\label{thm:general-inverse}
+	Let $m$ and $n$ be nonnegative integers such that $m \ge 2$ and $A \in \mathbb{C}^{N\times N}$ be the circulant matrix of form~\eqref{eq:A}.
+	Denote by $g(z)$ and $h(z)$ the polynomials
+	\[
+	g(z) := \sum_{k=-n}^{m-1}a_{k}z^{k+n},~~h(z) := \sum_{k=-n}^{m-1}a_{k}z^{m-k-1}.
+	\]
+	Assume that $g(z)$ does not have roots on the unit cirle $U$.
+	Denote $z_1, \dots, z_s$ the roots of $g(z)$ located inside $U$ and $p_1, \dots, p_k$ their respective orders.
+	Similarly, denote $w_1, \dots, w_t$ the roots of $h(z)$ located inside $U$ and $q_1, \dots, q_t$ their respective orders.
+	
+	Under these conditions $A$ is invertible and its inverse is the circulant matrix $X\in\mathbb{C}^{N\times N}$ with elements $X_{j,\ell} = x_{(j-\ell)\bmod N}:$
+	\[
+	x_j
+	=
+	\sum_{k=1}^s\sum_{p'=0}^{p_k-1}
+	c_{g,k,p'}
+	(-j+n-1+N)^{\underline{p}'} z_k^{-j+n-1+N-p'}
+	+
+	\sum_{k=1}^t\sum_{q'=0}^{q_k-1}
+	c_{h,k,q'}
+	(j+m-2)^{\underline{q}'}w_k^{j+m-2-q'},
+	\]
+	where
+	\begin{align*}
+    c_{g,k,p'}
+	    &=
+    \sum_{p=p'}^{p_k-1}\frac{1}{(p_k - 1)!}\binom{p_k-1}{p}\binom{p}{p'}
+	\left(\frac{1}{g_k(z)}\right)^{(p_k-1-p)}_{\big|{z=z_k}}
+	\left(\frac{1}{1-z^{N}}\right)^{(p-p')}_{\big|{z=z_k}},
+	&
+	g_k(z) = \frac{g(z)}{(z-z_k)^{p_k}}
+	\\
+	c_{h,k,q'}
+	    &=
+	\sum_{q=q'}^{q_k-1}
+	\frac{1}{(q_k - 1)!}\binom{q_k-1}{q}\binom{q}{q'}
+	\left(\frac{1}{h_k(z)}\right)^{(q_k-1-q)}_{\big|{z=w_k}}
+	\left(\frac{1}{1-z^{N}}\right)^{(q-q')}_{\big|{z=w_k}},
+	&
+	h_k(z) = \frac{h(z)}{(z-w_k)^{q_k}}
+	\end{align*}
+	and
+	$M^{\underline{r}}$ denotes the falling factorial:
+	\[
+	M^{\underline{r}} = 
+	\begin{cases}
+	1, & \text{if } r = 0, \\
+	M(M-1)\dots(M-r+1), & \text{otherwise}.
+	\end{cases}
+	\]
+	\end{theorem}
+	
+	\begin{proof}
+	Let us express the elements of $B$ through the roots of $g(z)$ and $h(z)$.
+	As $B$ is biinfinite circulant matrix, we can compute only its first column.
+	First, let us we perform the substitution $w = z^{-1}$ in the integral~\eqref{eq:B}:
+	\[
+	B_{j,0}
+	=
+	\frac{1}{2\pi i} \oint_U \frac{z^{-j-1}dz}{f(z)}
+	=
+	-\frac{1}{2\pi i} \oint_U \frac{w^{j+1}}{f(w^{-1})}\cdot\frac{-dw}{w^2}
+	=
+	\frac{1}{2\pi i} \oint_U \frac{w^{j-1}dw}{f(w^{-1})}.
+	\]
+	Note that there appeared two minuses (one from the differential $d(w^{-1})$ and one from the change of integral direction)  that gave a plus.
+	Now we can split the formula for $B_{j,0}$ into two cases:
+	\[
+	B_{j,0} =
+	\begin{dcases}
+	\frac{1}{2\pi i} \oint_U\frac{z^{-j-1}dz}{f(z)}
+	=
+	\frac{1}{2\pi i} \oint_U\frac{z^{-j+n-1}dz}{g(z)}, & \text{if }j < 0, \\
+	\frac{1}{2\pi i} \oint_U\frac{z^{j-1}dz}{f(z^{-1})}
+	=
+	\frac{1}{2\pi i} \oint_U\frac{z^{j+m-2}dz}{h(z)},  & \text{if } j \ge 0.
+	\end{dcases}
+	\]
+	Note that $g(0) = a_{-n} \neq 0$ and $h(0) = a_{m-1} \neq 0$, so zero is not a root of $g(z)$ and $h(z)$.
+	Moreover, as $m \ge 2$ and $n \ge 0$, both powers $j + m - 2$ and $-j + n - 1$ are nonnegative for the corresponding values of $j$.
+	Thus the integrands above have singularities only at the roots of $g(z)$ and $h(z)$ respectively.
+	We will transform the expression for $j < 0$ as the case of $j \ge 0$ is handled analogously.
+	
+	Using the residue theorem and the formula for the residue at the pole of order $p_k$, we can write (for $j < 0$):
+	\[
+	B_{j,0} =
+	\frac{1}{2\pi i} \oint_U\frac{z^{-j+n-1}dz}{g(z)} = \sum_{k=1}^s \mathrm{Res}\left(\frac{z^{-j+n-1}}{g(z)}, z_k\right) 
+	=
+	\sum_{k=1}^s\frac{1}{(p_k - 1)!}\left(\frac{z^{-j+n-1}}{g_k(z)}\right)^{(p_k-1)}_{\big|{z=z_k}}.
+	\]
+	Using the  higher order product rule, we obtain
+	\[
+	B_{j,0}
+	=
+	\sum_{k=1}^s\frac{1}{(p_k - 1)!}\sum_{p=0}^{p_k-1}\binom{p_k-1}{p}
+	(z^{-j+n-1})^{(p)}|_{z=z_k} \left(\frac{1}{g_k(z)}\right)^{(p_k-1-p)}_{\big|{z=z_k}}.
+	\]
+	For $j \ge 0$ the formula is very similar:
+	\[
+	B_{j,0}
+	=
+	\sum_{k=1}^t\frac{1}{(q_k - 1)!}\sum_{q=0}^{q_k-1}\binom{q_k-1}{q}
+	(z^{j+m-2})^{(q)}|_{z=w_k} \left(\frac{1}{h_k(z)}\right)^{(q_k-1-q)}_{\big|{z=w_k}}.
+	\]
+	
+	Let us now demonstrate that $\xi = B\beta$ is a solution of~\eqref{eq:infinite} and is $N$-periodic.
+	First,
+	\[
+	\sum_{\ell=-\infty}^{\infty} B_{j,\ell} \beta_{\ell}
+	=
+	\sum_{\ell=-\infty}^{\infty}B_{j, N\ell}
+	= 
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0}.
+	\]
+	The periodicity of this expression is obvious: if $j = j_1 + Nj_2$, we can write using the change of the summation variable:
+	\[
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0}
+	=
+	\sum_{\ell=-\infty}^{\infty}B_{j_1-N(\ell-j_2), 0}
+	=
+	\sum_{\ell=-\infty}^{\infty}B_{j_1-N\ell, 0}.
+	\]
+	Thus it is sufficient to consider the case $j = 0,\dots, N-1$. 
+	For these values of $j$ we split the sum in the following way:
+	\[
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0} 
+	=
+	\sum_{\ell=1}^{\infty}B_{j-N\ell, 0}
+	+
+	\sum_{\ell=-\infty}^{0}B_{j-N\ell, 0}.
+	\]
+	In the first sum the row index $j - N\ell$ is negative for all value of $\ell$ and in the second sum the row index is nonnegative for all values of $\ell$.
+	Thus, we can use the formulas for $B_{j,0}$ obtained above to write
+	\begin{align}
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0} 
+	&=
+	\sum_{k=1}^s\frac{1}{(p_k - 1)!}\sum_{p=0}^{p_k-1}\binom{p_k-1}{p}
+	\left(\frac{1}{g_k(z)}\right)^{(p_k-1-p)}_{\big|{z=z_k}}
+	\sum_{\ell=1}^{\infty}
+	(z^{-j+N\ell+n-1})^{(p)}|_{z=z_k}  \nonumber
+		+\\&+
+	\sum_{k=1}^t\frac{1}{(q_k - 1)!}\sum_{q=0}^{q_k-1}\binom{q_k-1}{q}
+	\left(\frac{1}{h_k(z)}\right)^{(q_k-1-q)}_{\big|{z=w_k}}
+	\sum_{\ell=-\infty}^{0}
+	(z^{j-N\ell+m-2})^{(q)}|_{z=w_k}. \label{eq:sum-of-B}
+	\end{align}
+    %
+    As $|z_k| < 1$ and $|w_k| < 1$, the series
+    $
+    \sum_{\ell=1}^{\infty}
+	P(\ell)z^{-j+N\ell+n-1}
+	$
+    and 
+    $
+    \sum_{\ell=0}^{\infty}
+	P(\ell)z^{j+N\ell+m-2}
+    $
+	converge uniformly in the neighbourhood of $z_k$ and $w_k$ respectively for any polynomial $P(\ell)$.
+	Thus, the summation and $p$-th derivative can be swapped, so we can obtain
+	\[
+	\sum_{\ell=1}^{\infty}
+	(z^{-j+N\ell+n-1})^{(p)}|_{z=z_k}
+	=
+    \left(\frac{z^{-j+n-1+N}}{1-z^{N}}\right)^{(p)}_{\big|{z=z_k}}
+    =
+	\sum_{p'=0}^p\binom{p}{p'}(z^{-j+n-1+N})^{(p')}|_{z=z_k} \left(\frac{1}{1-z^{N}}\right)^{(p-p')}_{\big|{z=z_k}}.
+	\]
+	The other series is computed in the same manner:	
+	\[
+	\sum_{\ell=0}^{\infty}
+	(z^{j+N\ell+m-2})^{(q)}|_{z=w_k}
+	=
+	\sum_{q'=0}^q\binom{q}{q'}(z^{j+m-2})^{(q')}|_{z=w_k} \left(\frac{1}{1-z^{N}}\right)^{(q-q')}_{\big|{z=w_k}}.
+	\]
+    %
+	Plugging these expression in~\eqref{eq:sum-of-B}, we finally get
+	\begin{align*}
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0} 
+	&=
+	\sum_{k=1}^s\sum_{p=0}^{p_k-1}\sum_{p'=0}^p\frac{1}{(p_k - 1)!}\binom{p_k-1}{p}\binom{p}{p'}
+	\left(\frac{1}{g_k(z)}\right)^{(p_k-1-p)}_{\big|{z=z_k}}
+	\left(\frac{1}{1-z^{N}}\right)^{(p-p')}_{\big|{z=z_k}}
+	(z^{-j+n-1+N})^{(p')}|_{z=z_k}
+	%(-j+n-1)^{\underline{p}'} z_k^{-j+n-1-p'}
+	+\\&+
+	\sum_{k=1}^t\sum_{q=0}^{q_k-1}\sum_{q'=0}^q
+	\frac{1}{(q_k - 1)!}\binom{q_k-1}{q}\binom{q}{q'}
+	\left(\frac{1}{h_k(z)}\right)^{(q_k-1-q)}_{\big|{z=w_k}}
+	\left(\frac{1}{1-z^{N}}\right)^{(q-q')}_{\big|{z=w_k}}
+	(z^{j+m-2})^{(q')}|_{z=w_k}
+	%(j+m-2-N)^{\underline{q}'}w_k^{j+m-2-N-q'}.
+	\end{align*}
+	Changing the summation order and using the formula for $c_{g,k,p'}$ and $c_{h,k,q'}$ we can write:
+	\[
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0} 
+	=
+	\sum_{k=1}^s\sum_{p'=0}^{p_k-1}
+	c_{g,k,p'}
+	(z^{-j+n-1+N})^{(p')}|_{z=z_k}
+	+
+	\sum_{k=1}^t\sum_{q'=0}^{q_k-1}
+	c_{h,k,q'}
+	(z^{j+m-2})^{(q')}|_{z=w_k}
+	\]
+	Now, the $p'$-th derivative of a monomial can be written using the falling factorial:
+	\[
+	(z^{-j+n-1+N})^{(p')}|_{z=z_k} = (-j+n-1+N)^{\underline{p}'} z_k^{-j+n-1+N-p'},
+	\]
+	the similar holds for $(z^{j+m-2})^{(q')}|_{z=w_k}$.
+	So finally we come to
+	\[
+	\sum_{\ell=-\infty}^{\infty}B_{j-N\ell, 0} 
+	=
+	\sum_{k=1}^s\sum_{p'=0}^{p_k-1}
+	c_{g,k,p'}
+	(-j+n-1+N)^{\underline{p}'} z_k^{-j+n-1+N-p'}
+	+
+	\sum_{k=1}^t\sum_{q'=0}^{q_k-1}
+	c_{h,k,q'}
+	(j+m-2)^{\underline{q}'}w_k^{j+m-2-q'}.
+	\]
+	
+	Note that we have implicitly shown that the series $\sum_{\ell}B_{j, N\ell}$ converges and therefore the biinfinite vector $\xi = B\beta$ is correctly defined (its $N$-periodicity has been shown above).
+	Now it remains to demonstrate that $\xi$ is the solution of~\eqref{eq:infinite}:
+	\[
+	A^{(\infty)}\xi = A^{(\infty)}(B\beta) = (A^{(\infty)}B)\beta = I^{(\infty)}\beta  =\beta.
+	\]
+	We have used the fact that multiplication of biinfinite matrices $A^{\infty}$, $B$ and $\beta$ is associative.
+	Generally, such multiplication is not associative, but in our case multiplication by $A^{(\infty)}$ involves only finite number of summands for each element of the product, so the associativity property holds.
+	Application of Lemma~\ref{lm:equivalent} finishes the proof.
+	\end{proof}
+	
+	\begin{corollary}
+	Under the conditions of Theorem~\ref{thm:general-inverse} if both $g(z)$ and $h(z)$ have only simple roots inside the unit circle $U$, then $A$ is invertible and its inverse is the circulant matrix $X\in\mathbb{C}^{N\times N}$ with elements $X_{j,\ell} = x_{(j-\ell)\bmod N}:$
+	\[
+	x_j
+	=
+    \sum_{k=1}^s
+    \frac{1}{g_k(z_k)(1-z_k^{N})}
+	z_k^{-j+n-1+N}
+	+
+	\sum_{k=1}^t
+	\frac{1}{h_k(w_k)(1-w_k^{N})}
+	w_k^{j+m-2},
+	\]
+	where
+	\[
+	g_k(z) = \frac{g(z)}{(z-z_k)^{p_k}},~~~
+	h_k(z) = \frac{h(z)}{(z-w_k)^{q_k}}.
+	\]
+	\end{corollary}
+\end{document}
+

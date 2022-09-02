@@ -1,0 +1,298 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb} \usepackage{euler,eucal}
+\usepackage{units}
+
+
+
+\usepackage[colorinlistoftodos,textwidth=4cm,shadow]{todonotes}
+\usepackage[colorlinks,urlcolor=blue]{hyperref}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec} \usepackage{polyglossia} %\usepackage{xunicode}
+  \defaultfontfeatures{Mapping=tex-text}
+  \setromanfont[Alternate=1]{Palatino}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\usepackage{color}
+  \usepackage[english]{babel}
+ %\usepackage{myconcrete}
+ \usepackage{tgpagella}
+\fi
+%
+%% page layout
+%
+\usepackage[left=30mm,right=30mm,top=20mm,bottom=30mm,a4paper]{geometry}
+
+\def\QST{\it\small}
+\def\ANS{\noindent\par\rm\normalsize}
+\newcommand{\QUOT}[1]{\begin{quote} {\small #1} \end{quote}}
+\def\O{\mathcal{O}}
+\def\A{\mathbf{A}}
+\def\G{\mathbf{G}}
+\def\x{\times}
+\def\Span{\mathop{\mathrm{span}}}
+
+\def\qfont{\fontfamily{fpl}\selectfont\itshape}
+\def\quotefont{\fontfamily{antt}\selectfont}
+\renewenvironment{quote}
+               {\list{{\fontfamily{fpl}\selectfont\Huge<<}}{\rightmargin\leftmargin}%
+                \item\relax\quotefont\small}
+                     {\normalfont\endlist  \raisebox{1.75em}[-1.5em][0em]{%
+                  \hbox to \textwidth{%
+                        \hfill\fontfamily{fpl}\selectfont\Huge>>\hskip 0.5ex}}}
+\newenvironment{quots}{<<\qfont}{\normalfont>>\:}
+\def\pals{p_\mathrm{als}}
+\def\ppow{p_\mathrm{pow}}
+
+\def\eps{\varepsilon}
+\def\trans{T}
+\newcounter{Ivan}
+\newcommand{\Ivan}[1]{
+	\refstepcounter{Ivan}{
+		\todo[inline,color={green!11!blue!22},size=\small]{\textbf{[IVAN\theIvan]:}~#1}
+	}
+}
+
+\newcounter{Maxim}
+\newcommand{\Maxim}[1]{
+	\refstepcounter{Maxim}{
+		\todo[inline,color={green!11!red!22},size=\small]{\textbf{[Maxim\theMaxim]:}~#1}
+	}
+}
+
+\newcommand{\Tau}{\mathcal{T}}
+\newcommand{\mA}{\mathcal{A}}
+\usepackage{alltt}
+\newcommand{\bX}{{\bf X}}
+\newcommand{\bR}{{\bf R}}
+\newcommand{\bP}{{\bf P}}
+\newcommand{\bY}{{\bf Y}}
+\newcommand{\bQ}{{\bf Q}}
+\newcommand{\bF}{{\bf F}}
+
+\newcommand{\nullmat}{{\bf S}}
+
+
+\newcommand{\rel}{\tau}
+\newcommand{\brel}{\mathbf{c}}
+
+\newcommand{\mX}{{\bf x}}
+\newcommand{\tX}{{\mathcal X}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\mY}{{\bf y}}
+\newcommand{\tY}{{\mathcal Y}}
+\newcommand{\mZ}{{\bf z}}
+\newcommand{\tZ}{{\mathcal Z}}
+\newcommand{\vv}{{\bf v}}
+
+\usepackage{caption}
+
+\newcommand{\multipleX}{\mathbf{X}}
+\newcommand{\mR}{\mathcal{R}}
+\newcommand{\mP}{\mathcal{P}}
+\newcommand{\multipleY}{\mathbf{Y}}
+\newcommand{\mQ}{\mathcal{Q}}
+\newcommand{\mH}{{\bf H}}
+\newcommand{\tH}{\mathcal{H}}
+\newcommand{\mO}{\mathcal{O}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\OP}{\mathsf{P}}
+\newcommand{\en}{\lambda}
+\newcommand{\bsize}{b}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\PP}{\mathbf{P}}
+\newcommand{\Lam}{\mathbf{\Lambda}}
+\newcommand{\Pvec}{\mathbf{p}}
+\newcommand{\Rvec}{\mathbf{r}}
+\newcommand{\Prec}{\mathbf{B}^{-1}}
+\newcommand{\Retr}{\mathcal{T}}
+\newcommand{\tens}[1]{\mathcal{#1}}
+\newcommand{\tensel}[1]{\mathcal{#1}}
+
+\newcommand{\energy}{\epsilon}
+
+\newcommand{\basis}{\mathbf{V}}
+
+\newcommand{\Rnd}{\mathbb{R}^{n^d}}
+
+\newcommand{\RQ}{\mathfrak{R}}
+
+\newcommand{\diag}{\text{diag}}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\rank}{{r}}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+
+
+\begin{document}
+
+We would like to thank both Reviewers and the Editor for valuable comments and constructive criticism.
+We agree with all the points made in the review reports, revise my manuscript accordingly, and
+   present the new version.
+The corresponding changes in the manuscript have been marked in blue font.
+%The major changes we have made in the revision include 
+%\begin{itemize}
+%\item The improved and more detailed description of the retraction operation;
+%\item Appendix B with the description of the eigb algorithm issues;
+%\item Table 1 with the complexities of different operations;
+%\item Figure 2 with the illustration of one step of the block version of the proposed algorithm.
+%\end{itemize}
+The specific line-by-line answer to the comments is given below.
+
+%The specific line-by-line answer to the comments of the Revieres is given below.
+%All changes that we made during this revision are highlited in the text of the paper.
+
+
+\begin{center}
+\Large\bfseries{Answer to Editor-in-Chief}
+\end{center}
+
+\begin{itemize}
+\item\QST
+ I believe that some more challenging (2D or 3D computational domains) should be mandatory for this paper to be publishable in our journal
+ 
+ \ANS
+We agree. One of the applications that we had in mind was indeed PDEs with more than 1 physical dimension.
+ We have added experiments for a 3D screened Poisson equation.
+
+\end{itemize}
+
+\begin{center}
+\Large\bfseries{Answer to Reviewer $\# 1$}
+\end{center}
+
+% 1) Eq. (5) was probably meant to contain a_{(k-j) mod N} to make it more than a copy of the previous equation.
+
+% 2) Theorem 2.1: it would be helpful to add an explicit statement like "... and f^{(p)}(z) denotes the p-th derivative of a function f(z)", since after the notation A^{(\infty)} this is not necessarily obvious.
+
+% 3) The definitions of g_k(z) and h_k(z) can be tricky, since technically their usage in the c-coefficients is a 0/0 indeterminacy. One could comment that the division in g_k(z) and h_k(z) is symbolic, or define them explicitly via remaining roots, i.e. g_k(z) = \Prod_{m \neq k } (z-z_m)^{p_m}.
+% Same for Corollary 2.1.
+
+% 4) Definition 4.1: p x q, q x r and p x r should probably be p x r, r x q and p x q, respectively.
+
+% 5) Lemma 4.2: define the matrices H, J, J' for completeness.
+
+% 6) z should be z_t in the 4th equation from the beginning of Page 13 (i.e. \tilde M_{t,k} = M_{t,k}' z_t^{2^{L-k+1}})
+
+% 7) First sentence of Section 5 deserves a clarification "... with piecewise linear finite elements."
+
+% 8) Page 15: S is undefined (should it be A_S instead?)
+
+\begin{itemize}
+
+\item\QST
+Eq. (5) was probably meant to contain $a_{(k-j) mod N}$ to make it more than a copy of the previous equation.
+
+\ANS
+
+This was actually been done intentionally since $A_{(k-j) mod N, 0} \not= a_{(k-j) mod N}$ due to the specific definition of $a_k$ (see Eq. (1)).
+
+\item\QST
+Theorem 2.1: it would be helpful to add an explicit statement like "... and $f^{(p)}(z)$ denotes the p-th derivative of a function f(z)", since after the notation $A^{(\infty)}$ this is not necessarily obvious.
+
+\ANS
+
+Thank you for this comment. We introduced the statement as you suggest. 
+
+\item\QST
+The definitions of $g_k(z)$ and $h_k(z)$ can be tricky, since technically their usage in the c-coefficients is a 0/0 indeterminacy. One could comment that the division in $g_k(z)$ and $h_k(z)$ is symbolic, or define them explicitly via remaining roots, i.e. $g_k(z) = \prod_{m \neq k } (z-z_m)^{p_m}$.
+ Same for Corollary 2.1.
+
+\ANS
+
+We agree. The definitions are modified. 
+
+
+\item\QST
+Definition 4.1: p x q, q x r and p x r should probably be p x r, r x q and p x q, respectively.
+
+\ANS
+
+Fixed.
+
+\item\QST
+Lemma 4.2: define the matrices H, J, J' for completeness.
+
+\ANS
+
+Added.
+
+\item\QST
+$z$ should be $z_t$ in the 4th equation from the beginning of Page 13 (i.e. $\tilde M_{t,k} = M_{t,k}' z_t^{2^{L-k+1}}$)
+
+\ANS
+
+Fixed.
+
+\item\QST
+First sentence of Section 5 deserves a clarification "... with piecewise linear finite elements."
+
+\ANS
+
+We agree. The respective comment has been added.
+
+\item\QST
+ Page 15: S is undefined (should it be $A_S$ instead?)
+
+\ANS
+
+You are correct. We have fixed this issue.
+	
+\end{itemize}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%% Reviewer 2 %%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\begin{center}
+\Large\bfseries{Answer to Reviewer $\# 2$}
+\end{center}
+
+
+\begin{itemize}
+
+\item\QST
+I propose to stress the motivation for this paper. Indeed, the discussion of the favorable complexity estimates for the QTT approximation, i.e. the logarithmic scaling of the storage and other numerical costs in the problem size, is not presented clearly. In turn, this favorable feature of the QTT tensor representations makes possible high accuracy approximation of functions and operators and further computations with moderate computer resources (nearly logarithmic costs in the problem size n).
+
+In view of the previous issue, the demonstration of the almost logarithmic time scaling for solving the equation (14) using the data presented in Figure 1 may improve the presentation essentially.
+
+\ANS
+
+Thank you for these comments. We have added two paragraphs to the introduction part to make emphasize on the complexity of the QTT approach.
+We have also added solution of the 3D screened Poisson equation, where we present running times, illustrating its almost linear dependence on $L$.
+
+\item\QST
+In the beginning of Section 5, page 13, and further on page 14, the mass and stiffness matrices are discussed. However, the corresponding differential operators and underlying discretizations are not specified.
+
+\ANS
+
+We  added the details, that we consider FEM discretization with piecewise linear basis functions on a uniform grid of second-order differential equations with constant coefficients.
+
+
+\item\QST
+In the list of literature the reference [10] coincides with [11].
+
+\ANS
+
+Thank you! Fixed.
+
+\end{itemize}
+
+
+
+
+\end{document}
